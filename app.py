@@ -197,6 +197,19 @@ def delete_menu(item_id):
 
     """, (item_id,))
 
+    conn.execute("""
+
+        UPDATE sqlite_sequence
+
+        SET seq = (
+            SELECT MAX(item_id)
+            FROM menu_items
+        )
+
+        WHERE name = 'menu_items'
+
+    """)
+
     conn.commit()
 
     conn.close()
@@ -330,6 +343,19 @@ def delete_customer(customer_id):
         WHERE customer_id = ?
 
     """, (customer_id,))
+
+    conn.execute("""
+
+        UPDATE sqlite_sequence
+
+        SET seq = (
+            SELECT MAX(customer_id)
+            FROM customers
+        )
+
+        WHERE name = 'customers'
+
+    """)
 
     conn.commit()
 
@@ -465,6 +491,19 @@ def delete_employee(employee_id):
 
     """, (employee_id,))
 
+    conn.execute("""
+
+        UPDATE sqlite_sequence
+
+        SET seq = (
+            SELECT MAX(employee_id)
+            FROM employees
+        )
+
+        WHERE name = 'employees'
+
+    """)
+
     conn.commit()
 
     conn.close()
@@ -516,7 +555,7 @@ def add_table():
         """, (
             table_number,
             capacity,
-           status
+            status
         ))
 
         conn.commit()
@@ -599,197 +638,24 @@ def delete_table(table_id):
 
     """, (table_id,))
 
+    conn.execute("""
+
+        UPDATE sqlite_sequence
+
+        SET seq = (
+            SELECT MAX(table_id)
+            FROM restaurant_tables
+        )
+
+        WHERE name = 'restaurant_tables'
+
+    """)
+
     conn.commit()
 
     conn.close()
 
     return redirect('/restaurant_tables')
-
-
-# =========================
-# ADD ORDER
-# =========================
-@app.route('/add_order', methods=['GET', 'POST'])
-def add_order():
-
-    conn = get_db_connection()
-
-    customers = conn.execute(
-        'SELECT * FROM customers'
-    ).fetchall()
-
-    tables = conn.execute(
-        'SELECT * FROM restaurant_tables'
-    ).fetchall()
-
-    menu_items = conn.execute(
-        'SELECT * FROM menu_items'
-    ).fetchall()
-
-    if request.method == 'POST':
-
-        customer_id = request.form['customer_id']
-        table_id = request.form['table_id']
-        item_id = request.form['item_id']
-        quantity = request.form['quantity']
-        total_price = request.form['total_price']
-        status = request.form['status']
-
-        cursor = conn.execute("""
-
-            INSERT INTO orders
-            (
-                customer_id,
-                employee_id,
-                table_id,
-                total_price,
-                status
-            )
-
-            VALUES (?, ?, ?, ?, ?)
-
-        """, (
-            customer_id,
-            1,
-            table_id,
-            total_price,
-            status
-        ))
-
-        order_id = cursor.lastrowid
-
-        conn.execute("""
-
-            INSERT INTO order_items
-            (
-                order_id,
-                item_id,
-                quantity,
-                subtotal
-            )
-
-            VALUES (?, ?, ?, ?)
-
-        """, (
-            order_id,
-            item_id,
-            quantity,
-            total_price
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/')
-
-    conn.close()
-
-    return render_template(
-        'add_order.html',
-        customers=customers,
-        tables=tables,
-        menu_items=menu_items
-    )
-
-
-# =========================
-# EDIT ORDER
-# =========================
-@app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
-def edit_order(order_id):
-
-    conn = get_db_connection()
-
-    order = conn.execute("""
-
-        SELECT *
-        FROM orders
-
-        WHERE order_id = ?
-
-    """, (order_id,)).fetchone()
-
-    customers = conn.execute(
-        'SELECT * FROM customers'
-    ).fetchall()
-
-    tables = conn.execute(
-        'SELECT * FROM restaurant_tables'
-    ).fetchall()
-
-    if request.method == 'POST':
-
-        customer_id = request.form['customer_id']
-        table_id = request.form['table_id']
-        total_price = request.form['total_price']
-        status = request.form['status']
-
-        conn.execute("""
-
-            UPDATE orders
-
-            SET
-                customer_id = ?,
-                table_id = ?,
-                total_price = ?,
-                status = ?
-
-            WHERE order_id = ?
-
-        """, (
-            customer_id,
-            table_id,
-            total_price,
-            status,
-            order_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/')
-
-    conn.close()
-
-    return render_template(
-        'edit_order.html',
-        order=order,
-        customers=customers,
-        tables=tables
-    )
-
-
-# =========================
-# DELETE ORDER
-# =========================
-@app.route('/delete_order/<int:order_id>')
-def delete_order(order_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM order_items
-
-        WHERE order_id = ?
-
-    """, (order_id,))
-
-    conn.execute("""
-
-        DELETE FROM orders
-
-        WHERE order_id = ?
-
-    """, (order_id,))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/')
 
 
 # =========================
