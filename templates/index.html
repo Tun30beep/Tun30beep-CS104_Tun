@@ -1,89 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Restaurant Dashboard</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Restaurant Dashboard</h1>
+        <h1>Restaurant Dashboard</h1>
 
-    <div class="button-group">
+        <div class="button-group">
 
-        <a href="/menu" class="btn btn-blue">
-            🍕 Manage Menu
-        </a>
+            <a href="/menu" class="btn btn-blue">
+                🍕 Manage Menu
+            </a>
 
-        <a href="/customers" class="btn btn-green">
-            👥 Customer List
-        </a>
+            <a href="/customers" class="btn btn-green">
+                👥 Customer List
+            </a>
 
-        <a href="/add_customer" class="btn btn-orange">
-            ➕ Add Customer
-        </a>
+            <a href="/add_customer" class="btn btn-orange">
+                ➕ Add Customer
+            </a>
 
-        <a href="/add_order" class="btn btn-yellow">
-            🧾 Add Order
-        </a>
+            <a href="/add_order" class="btn btn-yellow">
+                🧾 Add Order
+            </a>
 
-        <a href="/employees" class="btn btn-purple">
-            👨‍🍳 Employees
-        </a>
+            <a href="/employees" class="btn btn-purple">
+                👨‍🍳 Employees
+            </a>
 
-        <a href="/restaurant_tables" class="btn btn-dark">
-            🍽️ Tables
-        </a>
+            <a href="/restaurant_tables" class="btn btn-dark">
+                🍽️ Restaurant Tables
+            </a>
+
+        </div>
+
+        <table>
+
+            <tr>
+
+                <th>Order ID</th>
+
+                <th>Customer</th>
+
+                <th>Table</th>
+
+                <th>Total Price</th>
+
+                <th>Status</th>
+
+            </tr>
+
+            {% for order in orders %}
+
+            <tr>
+
+                <td>{{ order[0] }}</td>
+
+                <td>{{ order[1] }}</td>
+
+                <td>{{ order[2] }}</td>
+
+                <td>{{ order[3] }}</td>
+
+                <td>{{ order[4] }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
     </div>
-
-    <table>
-
-        <tr>
-
-            <th>Order ID</th>
-
-            <th>Customer</th>
-
-            <th>Table</th>
-
-            <th>Total Price</th>
-
-            <th>Status</th>
-
-        </tr>
-
-        {% for order in orders %}
-        <tr>
-
-            <td>{{ order.order_id }}</td>
-
-            <td>{{ order.customer_name }}</td>
-
-            <td>{{ order.table_number }}</td>
-
-            <td>{{ order.total_price }}</td>
-
-            <td>{{ order.status }}</td>
-
-        </tr>
-        {% endfor %}
-
-    </table>
-
-</div>
 
 </body>
 </html>
