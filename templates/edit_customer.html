@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Edit Customer</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Customer</h1>
+
+    <form method="POST">
+
+        <label>Name</label>
+
+        <input type="text"
+        name="name"
+        value="{{ customer['name'] }}"
+        required>
+
+
+        <label>Phone</label>
+
+        <input type="text"
+        name="phone"
+        value="{{ customer['phone'] }}"
+        required>
+
+
+        <label>Email</label>
+
+        <input type="email"
+        name="email"
+        value="{{ customer['email'] }}"
+        required>
+
+
+        <button type="submit">
+
+            Update Customer
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
