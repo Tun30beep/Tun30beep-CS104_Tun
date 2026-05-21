@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Customer List</title>
+    <title>Customers</title>
 
     <link rel="stylesheet"
     href="{{ url_for('static', filename='style.css') }}">
@@ -15,55 +14,56 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Customer List</h1>
+    <h1>Customer List</h1>
 
-        <div class="button-group">
+    <table>
 
-            <a href="/" class="btn btn-blue">
-                ← Dashboard
-            </a>
+        <tr>
 
-            <a href="/add_customer" class="btn btn-green">
-                ➕ Add Customer
-            </a>
+            <th>Customer ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Actions</th>
 
-        </div>
+        </tr>
 
-        <table>
+        {% for customer in customers %}
 
-            <tr>
+        <tr>
 
-                <th>Customer ID</th>
+            <td>{{ customer[0] }}</td>
+            <td>{{ customer[1] }}</td>
+            <td>{{ customer[2] }}</td>
+            <td>{{ customer[3] }}</td>
 
-                <th>Name</th>
+            <td>
 
-                <th>Phone</th>
+                <a href="/edit_customer/{{ customer[0] }}"
+                class="btn btn-yellow">
 
-                <th>Email</th>
+                    Edit
 
-            </tr>
+                </a>
 
-            {% for customer in customers %}
+                <a href="/delete_customer/{{ customer[0] }}"
+                class="btn btn-red">
 
-            <tr>
+                    Delete
 
-                <td>{{ customer[0] }}</td>
+                </a>
 
-                <td>{{ customer[1] }}</td>
+            </td>
 
-                <td>{{ customer[2] }}</td>
+        </tr>
 
-                <td>{{ customer[3] }}</td>
+        {% endfor %}
 
-            </tr>
+    </table>
 
-            {% endfor %}
-
-        </table>
-
-    </div>
+</div>
 
 </body>
 </html>
