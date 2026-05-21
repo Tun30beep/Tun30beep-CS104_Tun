@@ -1,3 +1,498 @@
+## `app.py`
+
+```python
+from flask import Flask, render_template, request, redirect
+import sqlite3
+
+app = Flask(__name__)
+
+DATABASE = 'database.db'
+
+
+# =========================
+# DATABASE CONNECTION
+# =========================
+def get_db_connection():
+
+    conn = sqlite3.connect(DATABASE)
+
+    conn.row_factory = sqlite3.Row
+
+    return conn
+
+
+# =========================
+# DASHBOARD
+# =========================
+@app.route('/')
+def index():
+
+    conn = get_db_connection()
+
+    orders = conn.execute("""
+
+        SELECT
+            o.order_id,
+            c.name AS customer_name,
+            rt.table_number,
+            o.total_price,
+            o.status
+
+        FROM orders o
+
+        JOIN customers c
+        ON o.customer_id = c.customer_id
+
+        JOIN restaurant_tables rt
+        ON o.table_id = rt.table_id
+
+        ORDER BY o.order_id DESC
+
+    """).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'index.html',
+        orders=orders
+    )
+
+
+# =========================
+# MENU PAGE
+# =========================
+@app.route('/menu')
+def menu():
+
+    conn = get_db_connection()
+
+    menu_items = conn.execute(
+        'SELECT * FROM menu_items'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'menu.html',
+        menu_items=menu_items
+    )
+
+
+# =========================
+# ADD MENU
+# =========================
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+
+    if request.method == 'POST':
+
+        item_name = request.form['item_name']
+
+        category = request.form['category']
+
+        price = request.form['price']
+
+        stock = request.form['stock']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO menu_items
+            (item_name, category, price, stock)
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            item_name,
+            category,
+            price,
+            stock
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/menu')
+
+    return render_template('add.html')
+
+
+# =========================
+# EDIT MENU
+# =========================
+@app.route('/edit/<int:item_id>', methods=['GET', 'POST'])
+def edit(item_id):
+
+    conn = get_db_connection()
+
+    menu_item = conn.execute("""
+
+        SELECT *
+        FROM menu_items
+
+        WHERE item_id = ?
+
+    """, (item_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        item_name = request.form['item_name']
+
+        category = request.form['category']
+
+        price = request.form['price']
+
+        stock = request.form['stock']
+
+        conn.execute("""
+
+            UPDATE menu_items
+
+            SET
+                item_name = ?,
+                category = ?,
+                price = ?,
+                stock = ?
+
+            WHERE item_id = ?
+
+        """, (
+            item_name,
+            category,
+            price,
+            stock,
+            item_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/menu')
+
+    conn.close()
+
+    return render_template(
+        'edit.html',
+        menu_item=menu_item
+    )
+
+
+# =========================
+# DELETE MENU
+# =========================
+@app.route('/delete/<int:item_id>')
+def delete(item_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM menu_items
+
+        WHERE item_id = ?
+
+    """, (item_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/menu')
+
+
+# =========================
+# CUSTOMERS PAGE
+# =========================
+@app.route('/customers')
+def customers():
+
+    conn = get_db_connection()
+
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'customers.html',
+        customers=customers
+    )
+
+
+# =========================
+# ADD CUSTOMER
+# =========================
+@app.route('/add_customer', methods=['GET', 'POST'])
+def add_customer():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+
+        phone = request.form['phone']
+
+        email = request.form['email']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO customers
+            (name, phone, email)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            name,
+            phone,
+            email
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/customers')
+
+    return render_template('add_customer.html')
+
+
+# =========================
+# ADD ORDER
+# =========================
+@app.route('/add_order', methods=['GET', 'POST'])
+def add_order():
+
+    conn = get_db_connection()
+
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    if request.method == 'POST':
+
+        customer_id = request.form['customer_id']
+
+        table_id = request.form['table_id']
+
+        total_price = request.form['total_price']
+
+        status = request.form['status']
+
+        conn.execute("""
+
+            INSERT INTO orders
+            (
+                customer_id,
+                employee_id,
+                table_id,
+                total_price,
+                status
+            )
+
+            VALUES (?, ?, ?, ?, ?)
+
+        """, (
+            customer_id,
+            1,
+            table_id,
+            total_price,
+            status
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/')
+
+    conn.close()
+
+    return render_template(
+        'add_order.html',
+        customers=customers
+    )
+
+
+# =========================
+# EMPLOYEES PAGE
+# =========================
+@app.route('/employees')
+def employees():
+
+    conn = get_db_connection()
+
+    employees = conn.execute(
+        'SELECT * FROM employees'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'employees.html',
+        employees=employees
+    )
+
+
+# =========================
+# ADD EMPLOYEE
+# =========================
+@app.route('/add_employee', methods=['GET', 'POST'])
+def add_employee():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+
+        role = request.form['role']
+
+        phone = request.form['phone']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO employees
+            (name, role, phone)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            name,
+            role,
+            phone
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/employees')
+
+    return render_template('add_employee.html')
+
+
+# =========================
+# DELETE EMPLOYEE
+# =========================
+@app.route('/delete_employee/<int:employee_id>')
+def delete_employee(employee_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM employees
+
+        WHERE employee_id = ?
+
+    """, (employee_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/employees')
+
+
+# =========================
+# RESTAURANT TABLES PAGE
+# =========================
+@app.route('/restaurant_tables')
+def restaurant_tables():
+
+    conn = get_db_connection()
+
+    tables = conn.execute(
+        'SELECT * FROM restaurant_tables'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'restaurant_tables.html',
+        tables=tables
+    )
+
+
+# =========================
+# ADD TABLE
+# =========================
+@app.route('/add_table', methods=['GET', 'POST'])
+def add_table():
+
+    if request.method == 'POST':
+
+        table_number = request.form['table_number']
+
+        capacity = request.form['capacity']
+
+        status = request.form['status']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO restaurant_tables
+            (table_number, capacity, status)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            table_number,
+            capacity,
+            status
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/restaurant_tables')
+
+    return render_template('add_table.html')
+
+
+# =========================
+# DELETE TABLE
+# =========================
+@app.route('/delete_table/<int:table_id>')
+def delete_table(table_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM restaurant_tables
+
+        WHERE table_id = ?
+
+    """, (table_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/restaurant_tables')
+
+
+# =========================
+# RUN APP
+# =========================
+if __name__ == '__main__':
+
+    app.run(debug=True)
+```
+
+---
+
+# `static/style.css`
+
+```css
 body {
 
     background: #f3f4f6;
@@ -135,3 +630,82 @@ tr:nth-child(even) {
 
     background: #f9fafb;
 }
+
+.btn-small {
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    margin-right: 10px;
+}
+
+.btn-edit {
+
+    background: orange;
+}
+
+.btn-delete {
+
+    background: red;
+}
+
+form {
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+    width: 500px;
+}
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 15px;
+
+    margin-bottom: 20px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    font-size: 18px;
+}
+
+button {
+
+    background: black;
+
+    color: white;
+
+    border: none;
+
+    padding: 15px 25px;
+
+    border-radius: 10px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+button:hover {
+
+    opacity: 0.9;
+}
+```
