@@ -1,22 +1,78 @@
-<form method="POST">
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-    <input type="number"
-           name="table_number"
-           placeholder="Table Number"
-           required>
+    <meta charset="UTF-8">
 
-    <input type="number"
-           name="capacity"
-           placeholder="Capacity"
-           required>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <input type="text"
-           name="status"
-           placeholder="Status"
-           required>
+    <title>Add Table</title>
 
-    <button type="submit">
-        Add Table
-    </button>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
 
-</form>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Add Restaurant Table</h1>
+
+        <div class="button-group">
+
+            <a href="/restaurant_tables" class="btn btn-blue">
+                ← Restaurant Tables
+            </a>
+
+        </div>
+
+        <form method="POST">
+
+            <label>Table Number</label>
+
+            <input type="number"
+            name="table_number"
+            placeholder="Enter table number"
+            required>
+
+
+            <label>Capacity</label>
+
+            <input type="number"
+            name="capacity"
+            placeholder="Enter table capacity"
+            required>
+
+
+            <label>Status</label>
+
+            <select name="status">
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Occupied">
+                    Occupied
+                </option>
+
+                <option value="Reserved">
+                    Reserved
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+
+                Add Table
+
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>
