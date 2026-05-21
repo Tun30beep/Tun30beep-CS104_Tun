@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Restaurant Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Restaurant Dashboard</h1>
+
+    <div class="button-group">
+
+        <a class="btn menu-btn" href="/menu">
+            🍕 Manage Menu
+        </a>
+
+        <a class="btn customer-btn" href="/customers">
+            👥 Customer List
+        </a>
+
+        <a class="btn add-customer-btn" href="/add_customer">
+            ➕ Add Customer
+        </a>
+
+        <a class="btn edit-btn" href="/add_order">
+            🧾 Add Order
+        </a>
+
+    </div>
+
+    <br><br>
+
+    <table>
+
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Table</th>
+            <th>Total Price</th>
+            <th>Status</th>
+        </tr>
+
+        {% for order in orders %}
+
+        <tr>
+
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.table_number }}</td>
+            <td>{{ order.total_price }}</td>
+            <td>{{ order.status }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

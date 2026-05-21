@@ -1,0 +1,194 @@
+```css id="t7m2vx"
+/* =========================================
+   BODY
+========================================= */
+
+body{
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 30px;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container{
+    width: 90%;
+    margin: auto;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+h1{
+    font-size: 60px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* =========================================
+   BUTTON GROUP
+========================================= */
+
+.button-group{
+    margin-bottom: 30px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn{
+    text-decoration: none;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-right: 12px;
+    display: inline-block;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+.btn:hover{
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* =========================================
+   BUTTON COLORS
+========================================= */
+
+.menu-btn{
+    background: #2563eb;
+}
+
+.customer-btn{
+    background: #16a34a;
+}
+
+.add-customer-btn{
+    background: #ea580c;
+}
+
+.home-btn{
+    background: #2563eb;
+}
+
+.add-btn{
+    background: #16a34a;
+}
+
+.edit-btn{
+    background: #f59e0b;
+}
+
+.delete-btn{
+    background: #dc2626;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+th, td{
+    border: 1px solid #ddd;
+    padding: 16px;
+    text-align: center;
+    font-size: 22px;
+}
+
+th{
+    background: black;
+    color: white;
+}
+
+tr:nth-child(even){
+    background: #f9f9f9;
+}
+
+tr:hover{
+    background: #f1f1f1;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+form{
+    background: white;
+    padding: 30px;
+    width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   LABEL
+========================================= */
+
+label{
+    display: block;
+    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* =========================================
+   INPUT
+========================================= */
+
+input{
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   SELECT
+========================================= */
+
+select{
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+button{
+    background: black;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover{
+    background: #222;
+}
+```

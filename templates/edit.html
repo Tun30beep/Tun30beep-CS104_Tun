@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Menu</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Menu Item</h1>
+
+    <!-- Back Button -->
+    <a class="btn home-btn" href="/menu">
+        ← Back to Menu
+    </a>
+
+    <br><br>
+
+    <form method="POST">
+
+        <label>Item Name</label>
+
+        <input
+            type="text"
+            name="item_name"
+            value="{{ item.item_name }}"
+            required
+        >
+
+        <label>Category</label>
+
+        <input
+            type="text"
+            name="category"
+            value="{{ item.category }}"
+            required
+        >
+
+        <label>Price</label>
+
+        <input
+            type="number"
+            name="price"
+            value="{{ item.price }}"
+            required
+        >
+
+        <label>Stock</label>
+
+        <input
+            type="number"
+            name="stock"
+            value="{{ item.stock }}"
+            required
+        >
+
+        <button type="submit">
+            Update Menu
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

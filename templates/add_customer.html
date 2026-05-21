@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Add Order</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Add Order</h1>
+
+    <!-- BACK BUTTON -->
+    <a class="btn home-btn" href="/">
+        ← Dashboard
+    </a>
+
+    <br><br>
+
+    <form method="POST">
+
+        <!-- ORDER ID -->
+        <label>Order ID</label>
+
+        <input
+            type="number"
+            name="order_id"
+            placeholder="Enter order id"
+            required
+        >
+
+        <!-- CUSTOMER -->
+        <label>Customer</label>
+
+        <select name="customer_id" required>
+
+            {% for customer in customers %}
+
+            <option value="{{ customer.customer_id }}">
+                {{ customer.name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <!-- TABLE -->
+        <label>Table</label>
+
+        <input
+            type="text"
+            name="table_id"
+            placeholder="Enter table number"
+            required
+        >
+
+        <!-- QUANTITY -->
+        <label>Quantity</label>
+
+        <input
+            type="number"
+            name="quantity"
+            placeholder="Enter quantity"
+            required
+        >
+
+        <!-- TOTAL PRICE -->
+        <label>Total Price</label>
+
+        <input
+            type="number"
+            name="total_price"
+            placeholder="Enter total price"
+            required
+        >
+
+        <!-- STATUS -->
+        <label>Status</label>
+
+        <select name="status">
+
+            <option value="pending">
+                pending
+            </option>
+
+            <option value="paid">
+                paid
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Add Order
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

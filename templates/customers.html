@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Customer List</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Customer List</h1>
+
+    <!-- DASHBOARD -->
+    <a class="btn home-btn" href="/">
+        ← Dashboard
+    </a>
+
+    <!-- ADD CUSTOMER -->
+    <a class="btn add-btn" href="/add_customer">
+        + Add Customer
+    </a>
+
+    <br><br>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+        </tr>
+
+        {% for customer in customers %}
+
+        <tr>
+
+            <td>{{ customer.customer_id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.email }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>
