@@ -1,0 +1,38 @@
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Order</h1>
+
+    <form method="POST">
+
+        <label>Total Price</label>
+
+        <input type="number"
+        step="0.01"
+        name="total_price"
+        value="{{ order[4] }}"
+        required>
+
+
+        <label>Status</label>
+
+        <input type="text"
+        name="status"
+        value="{{ order[5] }}"
+        required>
+
+
+        <button type="submit">
+
+            Update Order
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
