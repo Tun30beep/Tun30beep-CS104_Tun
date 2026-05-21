@@ -100,14 +100,36 @@ def add_menu():
 
         conn = get_db_connection()
 
+        last_item = conn.execute("""
+
+            SELECT MAX(item_id)
+            FROM menu_items
+
+        """).fetchone()
+
+        if last_item[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_item[0] + 1
+
         conn.execute("""
 
             INSERT INTO menu_items
-            (item_name, category, price, stock)
+            (
+                item_id,
+                item_name,
+                category,
+                price,
+                stock
+            )
 
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
 
         """, (
+            new_id,
             item_name,
             category,
             price,
@@ -197,19 +219,6 @@ def delete_menu(item_id):
 
     """, (item_id,))
 
-    conn.execute("""
-
-        UPDATE sqlite_sequence
-
-        SET seq = (
-            SELECT MAX(item_id)
-            FROM menu_items
-        )
-
-        WHERE name = 'menu_items'
-
-    """)
-
     conn.commit()
 
     conn.close()
@@ -251,14 +260,35 @@ def add_customer():
 
         conn = get_db_connection()
 
+        last_customer = conn.execute("""
+
+            SELECT MAX(customer_id)
+            FROM customers
+
+        """).fetchone()
+
+        if last_customer[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_customer[0] + 1
+
         conn.execute("""
 
             INSERT INTO customers
-            (name, phone, email)
+            (
+                customer_id,
+                name,
+                phone,
+                email
+            )
 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
 
         """, (
+            new_id,
             name,
             phone,
             email
@@ -344,377 +374,12 @@ def delete_customer(customer_id):
 
     """, (customer_id,))
 
-    conn.execute("""
-
-        UPDATE sqlite_sequence
-
-        SET seq = (
-            SELECT MAX(customer_id)
-            FROM customers
-        )
-
-        WHERE name = 'customers'
-
-    """)
-
     conn.commit()
 
     conn.close()
 
     return redirect('/customers')
 
-
-# =========================
-# EMPLOYEES PAGE
-# =========================
-@app.route('/employees')
-def employees():
-
-    conn = get_db_connection()
-
-    employees = conn.execute(
-        'SELECT * FROM employees'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'employees.html',
-        employees=employees
-    )
-
-
-# =========================
-# ADD EMPLOYEE
-# =========================
-@app.route('/add_employee', methods=['GET', 'POST'])
-def add_employee():
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-        role = request.form['role']
-        phone = request.form['phone']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO employees
-            (name, role, phone)
-
-            VALUES (?, ?, ?)
-
-        """, (
-            name,
-            role,
-            phone
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/employees')
-
-    return render_template('add_employee.html')
-
-
-# =========================
-# EDIT EMPLOYEE
-# =========================
-@app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
-def edit_employee(employee_id):
-
-    conn = get_db_connection()
-
-    employee = conn.execute("""
-
-        SELECT *
-        FROM employees
-
-        WHERE employee_id = ?
-
-    """, (employee_id,)).fetchone()
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-        role = request.form['role']
-        phone = request.form['phone']
-
-        conn.execute("""
-
-            UPDATE employees
-
-            SET
-                name = ?,
-                role = ?,
-                phone = ?
-
-            WHERE employee_id = ?
-
-        """, (
-            name,
-            role,
-            phone,
-            employee_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/employees')
-
-    conn.close()
-
-    return render_template(
-        'edit_employee.html',
-        employee=employee
-    )
-
-
-# =========================
-# DELETE EMPLOYEE
-# =========================
-@app.route('/delete_employee/<int:employee_id>')
-def delete_employee(employee_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM employees
-
-        WHERE employee_id = ?
-
-    """, (employee_id,))
-
-    conn.execute("""
-
-        UPDATE sqlite_sequence
-
-        SET seq = (
-            SELECT MAX(employee_id)
-            FROM employees
-        )
-
-        WHERE name = 'employees'
-
-    """)
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/employees')
-
-
-# =========================
-# RESTAURANT TABLES
-# =========================
-@app.route('/restaurant_tables')
-def restaurant_tables():
-
-    conn = get_db_connection()
-
-    tables = conn.execute(
-        'SELECT * FROM restaurant_tables'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'restaurant_tables.html',
-        tables=tables
-    )
-
-
-# =========================
-# ADD TABLE
-# =========================
-@app.route('/add_table', methods=['GET', 'POST'])
-def add_table():
-
-    if request.method == 'POST':
-
-        table_number = request.form['table_number']
-        capacity = request.form['capacity']
-        status = request.form['status']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO restaurant_tables
-            (table_number, capacity, status)
-
-            VALUES (?, ?, ?)
-
-        """, (
-            table_number,
-            capacity,
-            status
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/restaurant_tables')
-
-    return render_template('add_table.html')
-
-
-# =========================
-# EDIT TABLE
-# =========================
-@app.route('/edit_table/<int:table_id>', methods=['GET', 'POST'])
-def edit_table(table_id):
-
-    conn = get_db_connection()
-
-    table = conn.execute("""
-
-        SELECT *
-        FROM restaurant_tables
-
-        WHERE table_id = ?
-
-    """, (table_id,)).fetchone()
-
-    if request.method == 'POST':
-
-        table_number = request.form['table_number']
-        capacity = request.form['capacity']
-        status = request.form['status']
-
-        conn.execute("""
-
-            UPDATE restaurant_tables
-
-            SET
-                table_number = ?,
-                capacity = ?,
-                status = ?
-
-            WHERE table_id = ?
-
-        """, (
-            table_number,
-            capacity,
-            status,
-            table_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/restaurant_tables')
-
-    conn.close()
-
-    return render_template(
-        'edit_table.html',
-        table=table
-    )
-
-
-# =========================
-# DELETE TABLE
-# =========================
-@app.route('/delete_table/<int:table_id>')
-def delete_table(table_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM restaurant_tables
-
-        WHERE table_id = ?
-
-    """, (table_id,))
-
-    conn.execute("""
-
-        UPDATE sqlite_sequence
-
-        SET seq = (
-            SELECT MAX(table_id)
-            FROM restaurant_tables
-        )
-
-        WHERE name = 'restaurant_tables'
-
-    """)
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/restaurant_tables')
-
-# =========================
-# ADD CUSTOMER
-# =========================
-@app.route('/add_customer', methods=['GET', 'POST'])
-def add_customer():
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-        phone = request.form['phone']
-        email = request.form['email']
-
-        conn = get_db_connection()
-
-        # หา customer_id ล่าสุด
-        last_customer = conn.execute("""
-
-            SELECT MAX(customer_id)
-            FROM customers
-
-        """).fetchone()
-
-        # ถ้ายังไม่มีข้อมูล
-        if last_customer[0] is None:
-
-            new_id = 1
-
-        else:
-
-            new_id = last_customer[0] + 1
-
-        # INSERT แบบกำหนด ID เอง
-        conn.execute("""
-
-            INSERT INTO customers
-            (
-                customer_id,
-                name,
-                phone,
-                email
-            )
-
-            VALUES (?, ?, ?, ?)
-
-        """, (
-            new_id,
-            name,
-            phone,
-            email
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/customers')
-
-    return render_template('add_customer.html')
 
 # =========================
 # RUN APP
