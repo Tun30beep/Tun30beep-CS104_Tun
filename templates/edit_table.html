@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Edit Table</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Table</h1>
+
+    <form method="POST">
+
+        <label>Table Number</label>
+
+        <input type="number"
+        name="table_number"
+        value="{{ table['table_number'] }}"
+        required>
+
+
+        <label>Capacity</label>
+
+        <input type="number"
+        name="capacity"
+        value="{{ table['capacity'] }}"
+        required>
+
+
+        <label>Status</label>
+
+        <input type="text"
+        name="status"
+        value="{{ table['status'] }}"
+        required>
+
+
+        <button type="submit">
+
+            Update Table
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
