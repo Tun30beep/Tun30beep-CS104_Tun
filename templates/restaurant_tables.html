@@ -1,82 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Restaurant Tables</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Restaurant Tables</h1>
+        <h1>Restaurant Tables</h1>
 
-    <div class="button-group">
+        <div class="button-group">
 
-        <a href="/" class="btn btn-blue">
-            ← Dashboard
-        </a>
+            <a href="/" class="btn btn-blue">
+                ← Dashboard
+            </a>
 
-        <a href="/add_table" class="btn btn-green">
-            ➕ Add Table
-        </a>
+            <a href="/add_table" class="btn btn-green">
+                ➕ Add Table
+            </a>
+
+        </div>
+
+        <table>
+
+            <tr>
+
+                <th>Table ID</th>
+
+                <th>Table Number</th>
+
+                <th>Capacity</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+
+            </tr>
+
+            {% for table in tables %}
+
+            <tr>
+
+                <td>{{ table[0] }}</td>
+
+                <td>{{ table[1] }}</td>
+
+                <td>{{ table[2] }}</td>
+
+                <td>{{ table[3] }}</td>
+
+                <td>
+
+                    <a href="/delete_table/{{ table[0] }}"
+                    class="btn-small btn-delete"
+                    onclick="return confirm('Delete this table?')">
+
+                        Delete
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
     </div>
-
-    <table>
-
-        <tr>
-
-            <th>ID</th>
-
-            <th>Table Number</th>
-
-            <th>Capacity</th>
-
-            <th>Status</th>
-
-            <th>Action</th>
-
-        </tr>
-
-        {% for table in tables %}
-        <tr>
-
-            <td>{{ table.table_id }}</td>
-
-            <td>{{ table.table_number }}</td>
-
-            <td>{{ table.capacity }}</td>
-
-            <td>{{ table.status }}</td>
-
-            <td>
-
-                <a href="/delete_table/{{ table.table_id }}"
-                   class="btn-small btn-delete">
-
-                    Delete
-
-                </a>
-
-            </td>
-
-        </tr>
-        {% endfor %}
-
-    </table>
-
-</div>
 
 </body>
 </html>
