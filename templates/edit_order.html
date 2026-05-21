@@ -20,6 +20,40 @@
 
     <form method="POST">
 
+        <label>Customer</label>
+
+        <select name="customer_id">
+
+            {% for customer in customers %}
+
+            <option value="{{ customer[0] }}">
+
+                {{ customer[1] }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <label>Table</label>
+
+        <select name="table_id">
+
+            {% for table in tables %}
+
+            <option value="{{ table[0] }}">
+
+                Table {{ table[1] }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+
         <label>Total Price</label>
 
         <input type="number"
