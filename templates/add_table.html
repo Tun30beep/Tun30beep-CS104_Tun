@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Table</title>
 
@@ -15,64 +14,42 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Add Restaurant Table</h1>
+    <h1>Add Table</h1>
 
-        <div class="button-group">
+    <form method="POST">
 
-            <a href="/restaurant_tables" class="btn btn-blue">
-                ← Restaurant Tables
-            </a>
+        <label>Table Number</label>
 
-        </div>
-
-        <form method="POST">
-
-            <label>Table Number</label>
-
-            <input type="number"
-            name="table_number"
-            placeholder="Enter table number"
-            required>
+        <input type="number"
+        name="table_number"
+        required>
 
 
-            <label>Capacity</label>
+        <label>Capacity</label>
 
-            <input type="number"
-            name="capacity"
-            placeholder="Enter table capacity"
-            required>
-
-
-            <label>Status</label>
-
-            <select name="status">
-
-                <option value="Available">
-                    Available
-                </option>
-
-                <option value="Occupied">
-                    Occupied
-                </option>
-
-                <option value="Reserved">
-                    Reserved
-                </option>
-
-            </select>
+        <input type="number"
+        name="capacity"
+        required>
 
 
-            <button type="submit">
+        <label>Status</label>
 
-                Add Table
+        <input type="text"
+        name="status"
+        required>
 
-            </button>
 
-        </form>
+        <button type="submit">
 
-    </div>
+            Add Table
+
+        </button>
+
+    </form>
+
+</div>
 
 </body>
 </html>
