@@ -1,82 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Employees</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Employees</h1>
+        <h1>Employees</h1>
 
-    <div class="button-group">
+        <div class="button-group">
 
-        <a href="/" class="btn btn-blue">
-            ← Dashboard
-        </a>
+            <a href="/" class="btn btn-blue">
+                ← Dashboard
+            </a>
 
-        <a href="/add_employee" class="btn btn-green">
-            ➕ Add Employee
-        </a>
+            <a href="/add_employee" class="btn btn-green">
+                ➕ Add Employee
+            </a>
+
+        </div>
+
+        <table>
+
+            <tr>
+
+                <th>Employee ID</th>
+
+                <th>Name</th>
+
+                <th>Role</th>
+
+                <th>Phone</th>
+
+                <th>Action</th>
+
+            </tr>
+
+            {% for employee in employees %}
+
+            <tr>
+
+                <td>{{ employee[0] }}</td>
+
+                <td>{{ employee[1] }}</td>
+
+                <td>{{ employee[2] }}</td>
+
+                <td>{{ employee[3] }}</td>
+
+                <td>
+
+                    <a href="/delete_employee/{{ employee[0] }}"
+                    class="btn-small btn-delete"
+                    onclick="return confirm('Delete this employee?')">
+
+                        Delete
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
     </div>
-
-    <table>
-
-        <tr>
-
-            <th>ID</th>
-
-            <th>Name</th>
-
-            <th>Role</th>
-
-            <th>Phone</th>
-
-            <th>Action</th>
-
-        </tr>
-
-        {% for employee in employees %}
-        <tr>
-
-            <td>{{ employee.employee_id }}</td>
-
-            <td>{{ employee.name }}</td>
-
-            <td>{{ employee.role }}</td>
-
-            <td>{{ employee.phone }}</td>
-
-            <td>
-
-                <a href="/delete_employee/{{ employee.employee_id }}"
-                   class="btn-small btn-delete">
-
-                    Delete
-
-                </a>
-
-            </td>
-
-        </tr>
-        {% endfor %}
-
-    </table>
-
-</div>
 
 </body>
 </html>
