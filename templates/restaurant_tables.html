@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Restaurant Tables</title>
 
@@ -15,70 +12,37 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Restaurant Tables</h1>
+    <h1>Restaurant Tables</h1>
 
-        <div class="button-group">
+    <table>
 
-            <a href="/" class="btn btn-blue">
-                ← Dashboard
-            </a>
+        <tr>
 
-            <a href="/add_table" class="btn btn-green">
-                ➕ Add Table
-            </a>
+            <th>ID</th>
+            <th>Table Number</th>
+            <th>Capacity</th>
+            <th>Status</th>
 
-        </div>
+        </tr>
 
-        <table>
+        {% for table in tables %}
 
-            <tr>
+        <tr>
 
-                <th>Table ID</th>
+            <td>{{ table[0] }}</td>
+            <td>{{ table[1] }}</td>
+            <td>{{ table[2] }}</td>
+            <td>{{ table[3] }}</td>
 
-                <th>Table Number</th>
+        </tr>
 
-                <th>Capacity</th>
+        {% endfor %}
 
-                <th>Status</th>
+    </table>
 
-                <th>Action</th>
-
-            </tr>
-
-            {% for table in tables %}
-
-            <tr>
-
-                <td>{{ table[0] }}</td>
-
-                <td>{{ table[1] }}</td>
-
-                <td>{{ table[2] }}</td>
-
-                <td>{{ table[3] }}</td>
-
-                <td>
-
-                    <a href="/delete_table/{{ table[0] }}"
-                    class="btn-small btn-delete"
-                    onclick="return confirm('Delete this table?')">
-
-                        Delete
-
-                    </a>
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-        </table>
-
-    </div>
+</div>
 
 </body>
 </html>
-
