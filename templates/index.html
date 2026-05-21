@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Dashboard</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
-
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
 <div class="container">
@@ -20,25 +16,31 @@
 
     <div class="button-group">
 
-        <a class="btn menu-btn" href="/menu">
+        <a href="/menu" class="btn btn-blue">
             🍕 Manage Menu
         </a>
 
-        <a class="btn customer-btn" href="/customers">
+        <a href="/customers" class="btn btn-green">
             👥 Customer List
         </a>
 
-        <a class="btn add-customer-btn" href="/add_customer">
+        <a href="/add_customer" class="btn btn-orange">
             ➕ Add Customer
         </a>
 
-        <a class="btn edit-btn" href="/add_order">
+        <a href="/add_order" class="btn btn-yellow">
             🧾 Add Order
         </a>
 
-    </div>
+        <a href="/employees" class="btn btn-purple">
+            👨‍🍳 Employees
+        </a>
 
-    <br><br>
+        <a href="/restaurant_tables" class="btn btn-dark">
+            🍽️ Tables
+        </a>
+
+    </div>
 
     <table>
 
@@ -51,17 +53,19 @@
         </tr>
 
         {% for order in orders %}
-
         <tr>
 
             <td>{{ order.order_id }}</td>
+
             <td>{{ order.customer_name }}</td>
+
             <td>{{ order.table_number }}</td>
+
             <td>{{ order.total_price }}</td>
+
             <td>{{ order.status }}</td>
 
         </tr>
-
         {% endfor %}
 
     </table>
