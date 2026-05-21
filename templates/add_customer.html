@@ -1,109 +1,67 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
 
-    <title>Add Order</title>
+    <meta charset="UTF-8">
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Customer</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Add Order</h1>
+        <h1>Add Customer</h1>
 
-    <!-- BACK BUTTON -->
-    <a class="btn home-btn" href="/">
-        ← Dashboard
-    </a>
+        <div class="button-group">
 
-    <br><br>
+            <a href="/customers" class="btn btn-blue">
+                ← Customer List
+            </a>
 
-    <form method="POST">
+        </div>
 
-        <!-- ORDER ID -->
-        <label>Order ID</label>
+        <form method="POST">
 
-        <input
-            type="number"
-            name="order_id"
-            placeholder="Enter order id"
-            required
-        >
+            <label>Name</label>
 
-        <!-- CUSTOMER -->
-        <label>Customer</label>
+            <input type="text"
+            name="name"
+            placeholder="Enter customer name"
+            required>
 
-        <select name="customer_id" required>
 
-            {% for customer in customers %}
+            <label>Phone</label>
 
-            <option value="{{ customer.customer_id }}">
-                {{ customer.name }}
-            </option>
+            <input type="text"
+            name="phone"
+            placeholder="Enter phone number"
+            required>
 
-            {% endfor %}
 
-        </select>
+            <label>Email</label>
 
-        <!-- TABLE -->
-        <label>Table</label>
+            <input type="email"
+            name="email"
+            placeholder="Enter email"
+            required>
 
-        <input
-            type="text"
-            name="table_id"
-            placeholder="Enter table number"
-            required
-        >
 
-        <!-- QUANTITY -->
-        <label>Quantity</label>
+            <button type="submit">
 
-        <input
-            type="number"
-            name="quantity"
-            placeholder="Enter quantity"
-            required
-        >
+                Add Customer
 
-        <!-- TOTAL PRICE -->
-        <label>Total Price</label>
+            </button>
 
-        <input
-            type="number"
-            name="total_price"
-            placeholder="Enter total price"
-            required
-        >
+        </form>
 
-        <!-- STATUS -->
-        <label>Status</label>
-
-        <select name="status">
-
-            <option value="pending">
-                pending
-            </option>
-
-            <option value="paid">
-                paid
-            </option>
-
-        </select>
-
-        <button type="submit">
-            Add Order
-        </button>
-
-    </form>
-
-</div>
+    </div>
 
 </body>
 </html>
