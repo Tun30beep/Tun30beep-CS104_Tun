@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
-# =========================
-# FLASK APP
-# =========================
 app = Flask(__name__)
 
 DATABASE = 'database.db'
@@ -35,6 +32,7 @@ def index():
             o.order_id,
             c.name,
             rt.table_number,
+            mi.item_name,
             o.total_price,
             o.status
 
@@ -46,6 +44,12 @@ def index():
         JOIN restaurant_tables rt
         ON o.table_id = rt.table_id
 
+        JOIN order_items oi
+        ON o.order_id = oi.order_id
+
+        JOIN menu_items mi
+        ON oi.item_id = mi.item_id
+
         ORDER BY o.order_id DESC
 
     """).fetchall()
@@ -56,371 +60,6 @@ def index():
         'index.html',
         orders=orders
     )
-
-
-# =========================
-# MENU PAGE
-# =========================
-@app.route('/menu')
-def menu():
-
-    conn = get_db_connection()
-
-    menu_items = conn.execute(
-        'SELECT * FROM menu_items'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'menu.html',
-        menu_items=menu_items
-    )
-
-
-# =========================
-# ADD MENU
-# =========================
-@app.route('/add', methods=['GET', 'POST'])
-def add():
-
-    if request.method == 'POST':
-
-        item_name = request.form['item_name']
-
-        category = request.form['category']
-
-        price = request.form['price']
-
-        stock = request.form['stock']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO menu_items
-            (item_name, category, price, stock)
-
-            VALUES (?, ?, ?, ?)
-
-        """, (
-            item_name,
-            category,
-            price,
-            stock
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/menu')
-
-    return render_template('add.html')
-
-
-# =========================
-# EDIT MENU
-# =========================
-@app.route('/edit/<int:item_id>', methods=['GET', 'POST'])
-def edit(item_id):
-
-    conn = get_db_connection()
-
-    menu_item = conn.execute("""
-
-        SELECT *
-        FROM menu_items
-
-        WHERE item_id = ?
-
-    """, (item_id,)).fetchone()
-
-    if request.method == 'POST':
-
-        item_name = request.form['item_name']
-
-        category = request.form['category']
-
-        price = request.form['price']
-
-        stock = request.form['stock']
-
-        conn.execute("""
-
-            UPDATE menu_items
-
-            SET
-                item_name = ?,
-                category = ?,
-                price = ?,
-                stock = ?
-
-            WHERE item_id = ?
-
-        """, (
-            item_name,
-            category,
-            price,
-            stock,
-            item_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/menu')
-
-    conn.close()
-
-    return render_template(
-        'edit.html',
-        menu_item=menu_item
-    )
-
-
-# =========================
-# DELETE MENU
-# =========================
-@app.route('/delete/<int:item_id>')
-def delete(item_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM menu_items
-
-        WHERE item_id = ?
-
-    """, (item_id,))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/menu')
-
-
-# =========================
-# CUSTOMERS PAGE
-# =========================
-@app.route('/customers')
-def customers_page():
-
-    conn = get_db_connection()
-
-    customers = conn.execute(
-        'SELECT * FROM customers'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'customers.html',
-        customers=customers
-    )
-
-
-# =========================
-# ADD CUSTOMER
-# =========================
-@app.route('/add_customer', methods=['GET', 'POST'])
-def add_customer():
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-
-        phone = request.form['phone']
-
-        email = request.form['email']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO customers
-            (name, phone, email)
-
-            VALUES (?, ?, ?)
-
-        """, (
-            name,
-            phone,
-            email
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/customers')
-
-    return render_template('add_customer.html')
-
-
-# =========================
-# EMPLOYEES PAGE
-# =========================
-@app.route('/employees')
-def employees():
-
-    conn = get_db_connection()
-
-    employees = conn.execute(
-        'SELECT * FROM employees'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'employees.html',
-        employees=employees
-    )
-
-
-# =========================
-# ADD EMPLOYEE
-# =========================
-@app.route('/add_employee', methods=['GET', 'POST'])
-def add_employee():
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-
-        role = request.form['role']
-
-        phone = request.form['phone']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO employees
-            (name, role, phone)
-
-            VALUES (?, ?, ?)
-
-        """, (
-            name,
-            role,
-            phone
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/employees')
-
-    return render_template('add_employee.html')
-
-
-# =========================
-# DELETE EMPLOYEE
-# =========================
-@app.route('/delete_employee/<int:employee_id>')
-def delete_employee(employee_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM employees
-
-        WHERE employee_id = ?
-
-    """, (employee_id,))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/employees')
-
-
-# =========================
-# RESTAURANT TABLES PAGE
-# =========================
-@app.route('/restaurant_tables')
-def restaurant_tables():
-
-    conn = get_db_connection()
-
-    tables = conn.execute(
-        'SELECT * FROM restaurant_tables'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'restaurant_tables.html',
-        tables=tables
-    )
-
-
-# =========================
-# ADD TABLE
-# =========================
-@app.route('/add_table', methods=['GET', 'POST'])
-def add_table():
-
-    if request.method == 'POST':
-
-        table_number = request.form['table_number']
-
-        capacity = request.form['capacity']
-
-        status = request.form['status']
-
-        conn = get_db_connection()
-
-        conn.execute("""
-
-            INSERT INTO restaurant_tables
-            (table_number, capacity, status)
-
-            VALUES (?, ?, ?)
-
-        """, (
-            table_number,
-            capacity,
-            status
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/restaurant_tables')
-
-    return render_template('add_table.html')
-
-
-# =========================
-# DELETE TABLE
-# =========================
-@app.route('/delete_table/<int:table_id>')
-def delete_table(table_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM restaurant_tables
-
-        WHERE table_id = ?
-
-    """, (table_id,))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/restaurant_tables')
 
 
 # =========================
@@ -439,17 +78,25 @@ def add_order():
         'SELECT * FROM restaurant_tables'
     ).fetchall()
 
+    menu_items = conn.execute(
+        'SELECT * FROM menu_items'
+    ).fetchall()
+
     if request.method == 'POST':
 
         customer_id = request.form['customer_id']
 
         table_id = request.form['table_id']
 
+        item_id = request.form['item_id']
+
+        quantity = request.form['quantity']
+
         total_price = request.form['total_price']
 
         status = request.form['status']
 
-        conn.execute("""
+        cursor = conn.execute("""
 
             INSERT INTO orders
             (
@@ -470,6 +117,27 @@ def add_order():
             status
         ))
 
+        order_id = cursor.lastrowid
+
+        conn.execute("""
+
+            INSERT INTO order_items
+            (
+                order_id,
+                item_id,
+                quantity,
+                subtotal
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            order_id,
+            item_id,
+            quantity,
+            total_price
+        ))
+
         conn.commit()
 
         conn.close()
@@ -481,8 +149,93 @@ def add_order():
     return render_template(
         'add_order.html',
         customers=customers,
-        tables=tables
+        tables=tables,
+        menu_items=menu_items
     )
+
+
+# =========================
+# EDIT ORDER
+# =========================
+@app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
+def edit_order(order_id):
+
+    conn = get_db_connection()
+
+    order = conn.execute("""
+
+        SELECT *
+        FROM orders
+
+        WHERE order_id = ?
+
+    """, (order_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        total_price = request.form['total_price']
+
+        status = request.form['status']
+
+        conn.execute("""
+
+            UPDATE orders
+
+            SET
+                total_price = ?,
+                status = ?
+
+            WHERE order_id = ?
+
+        """, (
+            total_price,
+            status,
+            order_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/')
+
+    conn.close()
+
+    return render_template(
+        'edit_order.html',
+        order=order
+    )
+
+
+# =========================
+# DELETE ORDER
+# =========================
+@app.route('/delete_order/<int:order_id>')
+def delete_order(order_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM order_items
+
+        WHERE order_id = ?
+
+    """, (order_id,))
+
+    conn.execute("""
+
+        DELETE FROM orders
+
+        WHERE order_id = ?
+
+    """, (order_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/')
 
 
 # =========================
