@@ -5,10 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-    <title>Restaurant Dashboard</title>
+    <title>Dashboard</title>
 
     <link rel="stylesheet"
     href="{{ url_for('static', filename='style.css') }}">
@@ -17,150 +14,89 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Restaurant Dashboard</h1>
+    <h1>Restaurant Dashboard</h1>
 
+    <div class="button-group">
 
-        <!-- BUTTONS -->
-        <div class="button-group">
+        <a href="/add_order"
+        class="btn btn-green">
 
-            <a href="/menu"
-            class="btn btn-blue">
+            Add Order
 
-                🍕 Manage Menu
-
-            </a>
-
-
-            <a href="/customers"
-            class="btn btn-green">
-
-                👥 Customer List
-
-            </a>
-
-
-            <a href="/add_customer"
-            class="btn btn-orange">
-
-                ➕ Add Customer
-
-            </a>
-
-
-            <a href="/add_order"
-            class="btn btn-yellow">
-
-                🧾 Add Order
-
-            </a>
-
-
-            <a href="/employees"
-            class="btn btn-purple">
-
-                👨‍🍳 Employees
-
-            </a>
-
-
-            <a href="/restaurant_tables"
-            class="btn btn-dark">
-
-                🍽️ Restaurant Tables
-
-            </a>
-
-        </div>
-
-
-
-        <!-- ORDERS TABLE -->
-        <h2 class="section-title">
-
-            Latest Orders
-
-        </h2>
-
-        <table>
-
-            <tr>
-
-                <th>Order ID</th>
-
-                <th>Customer</th>
-
-                <th>Table</th>
-
-                <th>Total Price</th>
-
-                <th>Status</th>
-
-            </tr>
-
-            {% for order in orders %}
-
-            <tr>
-
-                <td>{{ order[0] }}</td>
-
-                <td>{{ order[1] }}</td>
-
-                <td>{{ order[2] }}</td>
-
-                <td>{{ order[3] }}</td>
-
-                <td>{{ order[4] }}</td>
-
-            </tr>
-
-            {% endfor %}
-
-        </table>
-
-
-
-        <!-- CUSTOMERS TABLE -->
-        <h2 class="section-title">
-
-            Latest Customers
-
-        </h2>
-
-        <table>
-
-            <tr>
-
-                <th>ID</th>
-
-                <th>Name</th>
-
-                <th>Phone</th>
-
-                <th>Email</th>
-
-            </tr>
-
-            {% for customer in customers %}
-
-            <tr>
-
-                <td>{{ customer[0] }}</td>
-
-                <td>{{ customer[1] }}</td>
-
-                <td>{{ customer[2] }}</td>
-
-                <td>{{ customer[3] }}</td>
-
-            </tr>
-
-            {% endfor %}
-
-        </table>
+        </a>
 
     </div>
+
+
+    <h2 class="section-title">
+
+        Latest Orders
+
+    </h2>
+
+    <table>
+
+        <tr>
+
+            <th>Order ID</th>
+
+            <th>Customer</th>
+
+            <th>Table</th>
+
+            <th>Food</th>
+
+            <th>Total Price</th>
+
+            <th>Status</th>
+
+            <th>Actions</th>
+
+        </tr>
+
+        {% for order in orders %}
+
+        <tr>
+
+            <td>{{ order[0] }}</td>
+
+            <td>{{ order[1] }}</td>
+
+            <td>{{ order[2] }}</td>
+
+            <td>{{ order[3] }}</td>
+
+            <td>{{ order[4] }}</td>
+
+            <td>{{ order[5] }}</td>
+
+            <td>
+
+                <a href="/edit_order/{{ order[0] }}"
+                class="btn btn-yellow">
+
+                    Edit
+
+                </a>
+
+                <a href="/delete_order/{{ order[0] }}"
+                class="btn btn-red">
+
+                    Delete
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
 
 </body>
 </html>
