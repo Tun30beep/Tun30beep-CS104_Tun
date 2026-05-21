@@ -1,109 +1,104 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Order</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Add Order</h1>
+        <h1>Add Order</h1>
 
-    <!-- BACK BUTTON -->
-    <a class="btn home-btn" href="/">
-        ← Dashboard
-    </a>
+        <div class="button-group">
 
-    <br><br>
+            <a href="/" class="btn btn-blue">
+                ← Dashboard
+            </a>
 
-    <form method="POST">
+        </div>
 
-        <!-- ORDER ID -->
-        <label>Order ID</label>
+        <form method="POST">
 
-        <input
-            type="number"
-            name="order_id"
-            placeholder="Enter order id"
-            required
-        >
+            <label>Customer</label>
 
-        <!-- CUSTOMER -->
-        <label>Customer</label>
+            <select name="customer_id" required>
 
-        <select name="customer_id" required>
+                {% for customer in customers %}
 
-            {% for customer in customers %}
+                <option value="{{ customer[0] }}">
 
-            <option value="{{ customer.customer_id }}">
-                {{ customer.name }}
-            </option>
+                    {{ customer[1] }}
 
-            {% endfor %}
+                </option>
 
-        </select>
+                {% endfor %}
 
-        <!-- TABLE -->
-        <label>Table</label>
+            </select>
 
-        <input
-            type="text"
+
+            <label>Table Number</label>
+
+            <input type="number"
             name="table_id"
-            placeholder="Enter table number"
-            required
-        >
+            placeholder="Enter Table ID"
+            required>
 
-        <!-- QUANTITY -->
-        <label>Quantity</label>
 
-        <input
-            type="number"
+            <label>Quantity</label>
+
+            <input type="number"
             name="quantity"
-            placeholder="Enter quantity"
-            required
-        >
+            placeholder="Enter Quantity"
+            required>
 
-        <!-- TOTAL PRICE -->
-        <label>Total Price</label>
 
-        <input
-            type="number"
+            <label>Total Price</label>
+
+            <input type="number"
+            step="0.01"
             name="total_price"
-            placeholder="Enter total price"
-            required
-        >
+            placeholder="Enter Total Price"
+            required>
 
-        <!-- STATUS -->
-        <label>Status</label>
 
-        <select name="status">
+            <label>Status</label>
 
-            <option value="pending">
-                pending
-            </option>
+            <select name="status">
 
-            <option value="paid">
-                paid
-            </option>
+                <option value="Pending">
+                    Pending
+                </option>
 
-        </select>
+                <option value="Paid">
+                    Paid
+                </option>
 
-        <button type="submit">
-            Add Order
-        </button>
+                <option value="Completed">
+                    Completed
+                </option>
 
-    </form>
+            </select>
 
-</div>
+
+            <button type="submit">
+
+                Add Order
+
+            </button>
+
+        </form>
+
+    </div>
 
 </body>
 </html>
