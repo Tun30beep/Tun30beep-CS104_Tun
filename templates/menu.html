@@ -1,83 +1,90 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Menu Management</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Menu Management</h1>
+        <h1>Menu Management</h1>
 
-    <!-- Back to Dashboard -->
-    <a class="btn home-btn" href="/">
-        ← Restaurant Dashboard
-    </a>
+        <div class="button-group">
 
-    <!-- Add Menu -->
-    <a class="btn add-btn" href="/add">
-        + Add Menu
-    </a>
+            <a href="/" class="btn btn-blue">
+                ← Dashboard
+            </a>
 
-    <br><br>
+            <a href="/add" class="btn btn-green">
+                ➕ Add Menu
+            </a>
 
-    <table>
+        </div>
 
-        <tr>
-            <th>ID</th>
-            <th>Menu</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Action</th>
-        </tr>
+        <table>
 
-        {% for item in menu_items %}
+            <tr>
 
-        <tr>
+                <th>ID</th>
 
-            <td>{{ item.item_id }}</td>
-            <td>{{ item.item_name }}</td>
-            <td>{{ item.category }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ item.stock }}</td>
+                <th>Menu</th>
 
-            <td>
+                <th>Category</th>
 
-                <!-- Edit -->
-                <a
-                    class="btn edit-btn"
-                    href="/edit/{{ item.item_id }}"
-                >
-                    Edit
-                </a>
+                <th>Price</th>
 
-                <!-- Delete -->
-                <a
-                    class="btn delete-btn"
-                    href="/delete/{{ item.item_id }}"
-                >
-                    Delete
-                </a>
+                <th>Stock</th>
 
-            </td>
+                <th>Action</th>
 
-        </tr>
+            </tr>
 
-        {% endfor %}
+            {% for item in menu_items %}
 
-    </table>
+            <tr>
 
-</div>
+                <td>{{ item[0] }}</td>
+
+                <td>{{ item[1] }}</td>
+
+                <td>{{ item[2] }}</td>
+
+                <td>{{ item[3] }}</td>
+
+                <td>{{ item[4] }}</td>
+
+                <td>
+
+                    <a href="/edit/{{ item[0] }}"
+                    class="btn-small btn-edit">
+                        Edit
+                    </a>
+
+                    <a href="/delete/{{ item[0] }}"
+                    class="btn-small btn-delete"
+                    onclick="return confirm('Delete this menu?')">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
 
 </body>
 </html>
