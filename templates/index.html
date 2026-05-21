@@ -1,53 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-    <title>Restaurant Dashboard</title>
-
-    <link rel="stylesheet"
-    href="{{ url_for('static', filename='style.css') }}">
-
-</head>
-
-<body>
-
-<div class="container">
-
-    <h1>Restaurant Dashboard</h1>
-
-
-    <!-- BUTTONS -->
-    <div class="button-group">
-
-        <a href="/menu"
-        class="btn btn-blue">
-
-            🍕 Manage Menu
-
-        </a>
-
-
-        <a href="/customers"
-        class="btn btn-green">
-
-            👥 Customer List
-
-        </a>
-
-
-        <a href="/add_customer"
+<a href="/add_customer"
         class="btn btn-orange">
 
             ➕ Add Customer
 
         </a>
-
 
         <a href="/add_order"
         class="btn btn-yellow">
@@ -56,14 +12,12 @@
 
         </a>
 
-
         <a href="/employees"
         class="btn btn-purple">
 
             👨‍🍳 Employees
 
         </a>
-
 
         <a href="/restaurant_tables"
         class="btn btn-dark">
@@ -75,7 +29,6 @@
     </div>
 
 
-    <!-- ORDERS TABLE -->
     <h2 class="section-title">
 
         Latest Orders
