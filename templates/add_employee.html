@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Employee</title>
 
@@ -15,53 +14,42 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Add Employee</h1>
+    <h1>Add Employee</h1>
 
-        <div class="button-group">
+    <form method="POST">
 
-            <a href="/employees" class="btn btn-blue">
-                ← Employees
-            </a>
+        <label>Name</label>
 
-        </div>
-
-        <form method="POST">
-
-            <label>Name</label>
-
-            <input type="text"
-            name="name"
-            placeholder="Enter employee name"
-            required>
+        <input type="text"
+        name="name"
+        required>
 
 
-            <label>Role</label>
+        <label>Role</label>
 
-            <input type="text"
-            name="role"
-            placeholder="Enter role"
-            required>
-
-
-            <label>Phone</label>
-
-            <input type="text"
-            name="phone"
-            placeholder="Enter phone number"
-            required>
+        <input type="text"
+        name="role"
+        required>
 
 
-            <button type="submit">
+        <label>Phone</label>
 
-                Add Employee
+        <input type="text"
+        name="phone"
+        required>
 
-            </button>
 
-        </form>
+        <button type="submit">
 
-    </div>
+            Add Employee
+
+        </button>
+
+    </form>
+
+</div>
 
 </body>
 </html>
