@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
+    <title>Employees</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Employees</h1>
+
+    <a href="/" class="btn btn-blue">
+        ← Dashboard
+    </a>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Phone</th>
+        </tr>
+
+        {% for employee in employees %}
+        <tr>
+
+            <td>{{ employee.employee_id }}</td>
+
+            <td>{{ employee.name }}</td>
+
+            <td>{{ employee.role }}</td>
+
+            <td>{{ employee.phone }}</td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>
