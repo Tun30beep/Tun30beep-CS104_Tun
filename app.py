@@ -1,3 +1,4 @@
+```python
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
@@ -259,63 +260,6 @@ def add_customer():
 
 
 # =========================
-# ADD ORDER
-# =========================
-@app.route('/add_order', methods=['GET', 'POST'])
-def add_order():
-
-    conn = get_db_connection()
-
-    customers = conn.execute(
-        'SELECT * FROM customers'
-    ).fetchall()
-
-    if request.method == 'POST':
-
-        customer_id = request.form['customer_id']
-
-        table_id = request.form['table_id']
-
-        total_price = request.form['total_price']
-
-        status = request.form['status']
-
-        conn.execute("""
-
-            INSERT INTO orders
-            (
-                customer_id,
-                employee_id,
-                table_id,
-                total_price,
-                status
-            )
-
-            VALUES (?, ?, ?, ?, ?)
-
-        """, (
-            customer_id,
-            1,
-            table_id,
-            total_price,
-            status
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/')
-
-    conn.close()
-
-    return render_template(
-        'add_order.html',
-        customers=customers
-    )
-
-
-# =========================
 # EMPLOYEES PAGE
 # =========================
 @app.route('/employees')
@@ -478,8 +422,68 @@ def delete_table(table_id):
 
 
 # =========================
+# ADD ORDER
+# =========================
+@app.route('/add_order', methods=['GET', 'POST'])
+def add_order():
+
+    conn = get_db_connection()
+
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    if request.method == 'POST':
+
+        customer_id = request.form['customer_id']
+
+        table_id = request.form['table_id']
+
+        quantity = request.form['quantity']
+
+        total_price = request.form['total_price']
+
+        status = request.form['status']
+
+        conn.execute("""
+
+            INSERT INTO orders
+            (
+                customer_id,
+                employee_id,
+                table_id,
+                total_price,
+                status
+            )
+
+            VALUES (?, ?, ?, ?, ?)
+
+        """, (
+            customer_id,
+            1,
+            table_id,
+            total_price,
+            status
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/')
+
+    conn.close()
+
+    return render_template(
+        'add_order.html',
+        customers=customers
+    )
+
+
+# =========================
 # RUN APP
 # =========================
 if __name__ == '__main__':
 
     app.run(debug=True)
+```
