@@ -657,6 +657,64 @@ def delete_table(table_id):
 
     return redirect('/restaurant_tables')
 
+# =========================
+# ADD CUSTOMER
+# =========================
+@app.route('/add_customer', methods=['GET', 'POST'])
+def add_customer():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+
+        conn = get_db_connection()
+
+        # หา customer_id ล่าสุด
+        last_customer = conn.execute("""
+
+            SELECT MAX(customer_id)
+            FROM customers
+
+        """).fetchone()
+
+        # ถ้ายังไม่มีข้อมูล
+        if last_customer[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_customer[0] + 1
+
+        # INSERT แบบกำหนด ID เอง
+        conn.execute("""
+
+            INSERT INTO customers
+            (
+                customer_id,
+                name,
+                phone,
+                email
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            new_id,
+            name,
+            phone,
+            email
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/customers')
+
+    return render_template('add_customer.html')
 
 # =========================
 # RUN APP
