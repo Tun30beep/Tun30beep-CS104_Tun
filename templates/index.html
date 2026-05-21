@@ -1,4 +1,40 @@
-<a href="/add_customer"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Restaurant Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Restaurant Dashboard</h1>
+
+    <div class="button-group">
+
+        <a href="/menu"
+        class="btn btn-blue">
+
+            🍕 Manage Menu
+
+        </a>
+
+        <a href="/customers"
+        class="btn btn-green">
+
+            👥 Customer List
+
+        </a>
+
+        <a href="/add_customer"
         class="btn btn-orange">
 
             ➕ Add Customer
@@ -28,7 +64,6 @@
 
     </div>
 
-
     <h2 class="section-title">
 
         Latest Orders
@@ -40,17 +75,11 @@
         <tr>
 
             <th>Order ID</th>
-
             <th>Customer</th>
-
             <th>Table</th>
-
             <th>Food</th>
-
             <th>Total Price</th>
-
             <th>Status</th>
-
             <th>Actions</th>
 
         </tr>
@@ -60,15 +89,10 @@
         <tr>
 
             <td>{{ order[0] }}</td>
-
             <td>{{ order[1] }}</td>
-
             <td>{{ order[2] }}</td>
-
             <td>{{ order[3] }}</td>
-
             <td>{{ order[4] }}</td>
-
             <td>{{ order[5] }}</td>
 
             <td>
