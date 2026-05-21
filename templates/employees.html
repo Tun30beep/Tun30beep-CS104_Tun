@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
@@ -9,24 +12,41 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
 <div class="container">
 
     <h1>Employees</h1>
 
-    <a href="/" class="btn btn-blue">
-        ← Dashboard
-    </a>
+    <div class="button-group">
+
+        <a href="/" class="btn btn-blue">
+            ← Dashboard
+        </a>
+
+        <a href="/add_employee" class="btn btn-green">
+            ➕ Add Employee
+        </a>
+
+    </div>
 
     <table>
 
         <tr>
+
             <th>ID</th>
+
             <th>Name</th>
+
             <th>Role</th>
+
             <th>Phone</th>
+
+            <th>Action</th>
+
         </tr>
 
         {% for employee in employees %}
@@ -39,6 +59,17 @@
             <td>{{ employee.role }}</td>
 
             <td>{{ employee.phone }}</td>
+
+            <td>
+
+                <a href="/delete_employee/{{ employee.employee_id }}"
+                   class="btn-small btn-delete">
+
+                    Delete
+
+                </a>
+
+            </td>
 
         </tr>
         {% endfor %}
