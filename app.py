@@ -100,7 +100,12 @@ def add():
 
             VALUES (?, ?, ?, ?)
 
-        """, (item_name, category, price, stock))
+        """, (
+            item_name,
+            category,
+            price,
+            stock
+        ))
 
         conn.commit()
 
@@ -196,7 +201,7 @@ def delete(item_id):
 
 
 # =========================
-# CUSTOMER LIST
+# CUSTOMERS PAGE
 # =========================
 @app.route('/customers')
 def customers():
@@ -238,7 +243,11 @@ def add_customer():
 
             VALUES (?, ?, ?)
 
-        """, (name, phone, email))
+        """, (
+            name,
+            phone,
+            email
+        ))
 
         conn.commit()
 
@@ -327,6 +336,67 @@ def employees():
 
 
 # =========================
+# ADD EMPLOYEE
+# =========================
+@app.route('/add_employee', methods=['GET', 'POST'])
+def add_employee():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+
+        role = request.form['role']
+
+        phone = request.form['phone']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO employees
+            (name, role, phone)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            name,
+            role,
+            phone
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/employees')
+
+    return render_template('add_employee.html')
+
+
+# =========================
+# DELETE EMPLOYEE
+# =========================
+@app.route('/delete_employee/<int:employee_id>')
+def delete_employee(employee_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM employees
+
+        WHERE employee_id = ?
+
+    """, (employee_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/employees')
+
+
+# =========================
 # RESTAURANT TABLES PAGE
 # =========================
 @app.route('/restaurant_tables')
@@ -344,6 +414,67 @@ def restaurant_tables():
         'restaurant_tables.html',
         tables=tables
     )
+
+
+# =========================
+# ADD TABLE
+# =========================
+@app.route('/add_table', methods=['GET', 'POST'])
+def add_table():
+
+    if request.method == 'POST':
+
+        table_number = request.form['table_number']
+
+        capacity = request.form['capacity']
+
+        status = request.form['status']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO restaurant_tables
+            (table_number, capacity, status)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            table_number,
+            capacity,
+            status
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/restaurant_tables')
+
+    return render_template('add_table.html')
+
+
+# =========================
+# DELETE TABLE
+# =========================
+@app.route('/delete_table/<int:table_id>')
+def delete_table(table_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM restaurant_tables
+
+        WHERE table_id = ?
+
+    """, (table_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/restaurant_tables')
 
 
 # =========================
