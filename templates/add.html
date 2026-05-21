@@ -1,51 +1,76 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Menu</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Add Menu Item</h1>
+        <h1>Add Menu</h1>
 
-    <!-- Back Button -->
-    <a class="btn home-btn" href="/menu">
-        ← Back to Menu
-    </a>
+        <div class="button-group">
 
-    <br><br>
+            <a href="/menu" class="btn btn-blue">
+                ← Manage Menu
+            </a>
 
-    <form method="POST">
+        </div>
 
-        <label>Item Name</label>
-        <input type="text" name="item_name" required>
+        <form method="POST">
 
-        <label>Category</label>
-        <input type="text" name="category" required>
+            <label>Item Name</label>
 
-        <label>Price</label>
-        <input type="number" name="price" required>
+            <input type="text"
+            name="item_name"
+            placeholder="Enter menu name"
+            required>
 
-        <label>Stock</label>
-        <input type="number" name="stock" required>
 
-        <button type="submit">
-            Add Menu
-        </button>
+            <label>Category</label>
 
-    </form>
+            <input type="text"
+            name="category"
+            placeholder="Enter category"
+            required>
 
-</div>
+
+            <label>Price</label>
+
+            <input type="number"
+            step="0.01"
+            name="price"
+            placeholder="Enter price"
+            required>
+
+
+            <label>Stock</label>
+
+            <input type="number"
+            name="stock"
+            placeholder="Enter stock"
+            required>
+
+
+            <button type="submit">
+
+                Add Menu
+
+            </button>
+
+        </form>
+
+    </div>
 
 </body>
 </html>
