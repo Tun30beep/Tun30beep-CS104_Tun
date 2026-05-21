@@ -63,6 +63,122 @@ def index():
 
 
 # =========================
+# CUSTOMERS
+# =========================
+@app.route('/customers')
+def customers_page():
+
+    conn = get_db_connection()
+
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'customers.html',
+        customers=customers
+    )
+
+
+# =========================
+# ADD CUSTOMER
+# =========================
+@app.route('/add_customer', methods=['GET', 'POST'])
+def add_customer():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+
+        conn = get_db_connection()
+
+        conn.execute("""
+
+            INSERT INTO customers
+            (name, phone, email)
+
+            VALUES (?, ?, ?)
+
+        """, (
+            name,
+            phone,
+            email
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/customers')
+
+    return render_template('add_customer.html')
+
+
+# =========================
+# EMPLOYEES
+# =========================
+@app.route('/employees')
+def employees():
+
+    conn = get_db_connection()
+
+    employees = conn.execute(
+        'SELECT * FROM employees'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'employees.html',
+        employees=employees
+    )
+
+
+# =========================
+# RESTAURANT TABLES
+# =========================
+@app.route('/restaurant_tables')
+def restaurant_tables():
+
+    conn = get_db_connection()
+
+    tables = conn.execute(
+        'SELECT * FROM restaurant_tables'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'restaurant_tables.html',
+        tables=tables
+    )
+
+
+# =========================
+# MENU
+# =========================
+@app.route('/menu')
+def menu():
+
+    conn = get_db_connection()
+
+    menu_items = conn.execute(
+        'SELECT * FROM menu_items'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'menu.html',
+        menu_items=menu_items
+    )
+
+
+# =========================
 # ADD ORDER
 # =========================
 @app.route('/add_order', methods=['GET', 'POST'])
@@ -85,15 +201,10 @@ def add_order():
     if request.method == 'POST':
 
         customer_id = request.form['customer_id']
-
         table_id = request.form['table_id']
-
         item_id = request.form['item_id']
-
         quantity = request.form['quantity']
-
         total_price = request.form['total_price']
-
         status = request.form['status']
 
         cursor = conn.execute("""
@@ -171,10 +282,19 @@ def edit_order(order_id):
 
     """, (order_id,)).fetchone()
 
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    tables = conn.execute(
+        'SELECT * FROM restaurant_tables'
+    ).fetchall()
+
     if request.method == 'POST':
 
+        customer_id = request.form['customer_id']
+        table_id = request.form['table_id']
         total_price = request.form['total_price']
-
         status = request.form['status']
 
         conn.execute("""
@@ -182,12 +302,16 @@ def edit_order(order_id):
             UPDATE orders
 
             SET
+                customer_id = ?,
+                table_id = ?,
                 total_price = ?,
                 status = ?
 
             WHERE order_id = ?
 
         """, (
+            customer_id,
+            table_id,
             total_price,
             status,
             order_id
@@ -203,7 +327,9 @@ def edit_order(order_id):
 
     return render_template(
         'edit_order.html',
-        order=order
+        order=order,
+        customers=customers,
+        tables=tables
     )
 
 
