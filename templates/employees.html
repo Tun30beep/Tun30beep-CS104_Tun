@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Employees</title>
 
@@ -15,69 +12,37 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>Employees</h1>
+    <h1>Employees</h1>
 
-        <div class="button-group">
+    <table>
 
-            <a href="/" class="btn btn-blue">
-                ← Dashboard
-            </a>
+        <tr>
 
-            <a href="/add_employee" class="btn btn-green">
-                ➕ Add Employee
-            </a>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Phone</th>
 
-        </div>
+        </tr>
 
-        <table>
+        {% for employee in employees %}
 
-            <tr>
+        <tr>
 
-                <th>Employee ID</th>
+            <td>{{ employee[0] }}</td>
+            <td>{{ employee[1] }}</td>
+            <td>{{ employee[2] }}</td>
+            <td>{{ employee[3] }}</td>
 
-                <th>Name</th>
+        </tr>
 
-                <th>Role</th>
+        {% endfor %}
 
-                <th>Phone</th>
+    </table>
 
-                <th>Action</th>
-
-            </tr>
-
-            {% for employee in employees %}
-
-            <tr>
-
-                <td>{{ employee[0] }}</td>
-
-                <td>{{ employee[1] }}</td>
-
-                <td>{{ employee[2] }}</td>
-
-                <td>{{ employee[3] }}</td>
-
-                <td>
-
-                    <a href="/delete_employee/{{ employee[0] }}"
-                    class="btn-small btn-delete"
-                    onclick="return confirm('Delete this employee?')">
-
-                        Delete
-
-                    </a>
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-        </table>
-
-    </div>
+</div>
 
 </body>
 </html>
