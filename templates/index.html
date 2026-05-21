@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
     <title>Restaurant Dashboard</title>
 
@@ -19,33 +21,67 @@
 
         <h1>Restaurant Dashboard</h1>
 
+
+        <!-- BUTTONS -->
         <div class="button-group">
 
-            <a href="/menu" class="btn btn-blue">
+            <a href="/menu"
+            class="btn btn-blue">
+
                 🍕 Manage Menu
+
             </a>
 
-            <a href="/customers" class="btn btn-green">
+
+            <a href="/customers"
+            class="btn btn-green">
+
                 👥 Customer List
+
             </a>
 
-            <a href="/add_customer" class="btn btn-orange">
+
+            <a href="/add_customer"
+            class="btn btn-orange">
+
                 ➕ Add Customer
+
             </a>
 
-            <a href="/add_order" class="btn btn-yellow">
+
+            <a href="/add_order"
+            class="btn btn-yellow">
+
                 🧾 Add Order
+
             </a>
 
-            <a href="/employees" class="btn btn-purple">
+
+            <a href="/employees"
+            class="btn btn-purple">
+
                 👨‍🍳 Employees
+
             </a>
 
-            <a href="/restaurant_tables" class="btn btn-dark">
+
+            <a href="/restaurant_tables"
+            class="btn btn-dark">
+
                 🍽️ Restaurant Tables
+
             </a>
 
         </div>
+
+
+
+        <!-- ORDERS TABLE -->
+        <h2 class="section-title">
+
+            Latest Orders
+
+        </h2>
 
         <table>
 
@@ -76,6 +112,47 @@
                 <td>{{ order[3] }}</td>
 
                 <td>{{ order[4] }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+
+
+        <!-- CUSTOMERS TABLE -->
+        <h2 class="section-title">
+
+            Latest Customers
+
+        </h2>
+
+        <table>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Name</th>
+
+                <th>Phone</th>
+
+                <th>Email</th>
+
+            </tr>
+
+            {% for customer in customers %}
+
+            <tr>
+
+                <td>{{ customer[0] }}</td>
+
+                <td>{{ customer[1] }}</td>
+
+                <td>{{ customer[2] }}</td>
+
+                <td>{{ customer[3] }}</td>
 
             </tr>
 
