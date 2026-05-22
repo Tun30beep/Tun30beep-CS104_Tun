@@ -185,6 +185,148 @@ def employees():
 
 
 # =========================
+# ADD EMPLOYEE
+# =========================
+@app.route('/add_employee', methods=['GET', 'POST'])
+def add_employee():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        role = request.form['role']
+        phone = request.form['phone']
+
+        conn = get_db_connection()
+
+        # หา ID ที่ว่าง
+        all_ids = conn.execute("""
+
+            SELECT employee_id
+            FROM employees
+
+            ORDER BY employee_id
+
+        """).fetchall()
+
+        employee_id = 1
+
+        for row in all_ids:
+
+            if row[0] == employee_id:
+
+                employee_id += 1
+
+            else:
+
+                break
+
+
+        conn.execute("""
+
+            INSERT INTO employees
+            (
+                employee_id,
+                name,
+                role,
+                phone
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            employee_id,
+            name,
+            role,
+            phone
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/employees')
+
+    return render_template('add_employee.html')
+
+
+# =========================
+# EDIT EMPLOYEE
+# =========================
+@app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
+def edit_employee(employee_id):
+
+    conn = get_db_connection()
+
+    employee = conn.execute("""
+
+        SELECT *
+        FROM employees
+
+        WHERE employee_id = ?
+
+    """, (employee_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        role = request.form['role']
+        phone = request.form['phone']
+
+        conn.execute("""
+
+            UPDATE employees
+
+            SET
+                name = ?,
+                role = ?,
+                phone = ?
+
+            WHERE employee_id = ?
+
+        """, (
+            name,
+            role,
+            phone,
+            employee_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/employees')
+
+    conn.close()
+
+    return render_template(
+        'edit_employee.html',
+        employee=employee
+    )
+
+
+# =========================
+# DELETE EMPLOYEE
+# =========================
+@app.route('/delete_employee/<int:employee_id>')
+def delete_employee(employee_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM employees
+
+        WHERE employee_id = ?
+
+    """, (employee_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/employees')
+
+# =========================
 # RESTAURANT TABLES
 # =========================
 @app.route('/restaurant_tables')
