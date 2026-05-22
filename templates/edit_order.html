@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-
-    <meta charset="UTF-8">
 
     <title>Edit Order</title>
 
@@ -20,38 +18,49 @@
 
     <form method="POST">
 
-        <label>Customer</label>
+        <label>Customer Name</label>
 
-        <select name="customer_id">
-
-            {% for customer in customers %}
-
-            <option value="{{ customer[0] }}">
-
-                {{ customer[1] }}
-
-            </option>
-
-            {% endfor %}
-
-        </select>
+        <input type="text"
+        name="customer_name"
+        value="{{ order['name'] }}"
+        required>
 
 
         <label>Table</label>
 
-        <select name="table_id">
+        <input type="text"
+        name="table_name"
+        value="{{ order['table_number'] }}"
+        required>
 
-            {% for table in tables %}
 
-            <option value="{{ table[0] }}">
+        <label>Food Item</label>
 
-                Table {{ table[1] }}
+        <select name="item_id">
+
+            {% for item in menu_items %}
+
+            <option value="{{ item[0] }}"
+
+            {% if item[0] == order['item_id'] %}
+            selected
+            {% endif %}>
+
+                {{ item[1] }}
 
             </option>
 
             {% endfor %}
 
         </select>
+
+
+        <label>Quantity</label>
+
+        <input type="number"
+        name="quantity"
+        value="{{ order['quantity'] }}"
+        required>
 
 
         <label>Total Price</label>
