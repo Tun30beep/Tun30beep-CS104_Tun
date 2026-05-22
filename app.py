@@ -639,6 +639,83 @@ def delete_order(order_id):
     return redirect('/')
 
 # =========================
+# EDIT CUSTOMER
+# =========================
+@app.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
+def edit_customer(customer_id):
+
+    conn = get_db_connection()
+
+    customer = conn.execute("""
+
+        SELECT *
+        FROM customers
+
+        WHERE customer_id = ?
+
+    """, (customer_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+
+        conn.execute("""
+
+            UPDATE customers
+
+            SET
+                name = ?,
+                phone = ?,
+                email = ?
+
+            WHERE customer_id = ?
+
+        """, (
+            name,
+            phone,
+            email,
+            customer_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/customers')
+
+    conn.close()
+
+    return render_template(
+        'edit_customer.html',
+        customer=customer
+    )
+
+
+# =========================
+# DELETE CUSTOMER
+# =========================
+@app.route('/delete_customer/<int:customer_id>')
+def delete_customer(customer_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM customers
+
+        WHERE customer_id = ?
+
+    """, (customer_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/customers')
+
+# =========================
 # RUN
 # =========================
 if __name__ == '__main__':
