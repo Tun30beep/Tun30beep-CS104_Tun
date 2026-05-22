@@ -465,6 +465,178 @@ def add_order():
         menu_items=menu_items
     )
 
+# =========================
+# EDIT ORDER
+# =========================
+@app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
+def edit_order(order_id):
+
+    conn = get_db_connection()
+
+    order = conn.execute("""
+
+        SELECT
+            o.order_id,
+            c.name,
+            rt.table_number,
+            oi.item_id,
+            oi.quantity,
+            o.total_price,
+            o.status
+
+        FROM orders o
+
+        JOIN customers c
+        ON o.customer_id = c.customer_id
+
+        JOIN restaurant_tables rt
+        ON o.table_id = rt.table_id
+
+        JOIN order_items oi
+        ON o.order_id = oi.order_id
+
+        WHERE o.order_id = ?
+
+    """, (order_id,)).fetchone()
+
+    menu_items = conn.execute(
+        'SELECT * FROM menu_items'
+    ).fetchall()
+
+    if request.method == 'POST':
+
+        customer_name = request.form['customer_name']
+        table_name = request.form['table_name']
+
+        item_id = request.form['item_id']
+        quantity = request.form['quantity']
+        total_price = request.form['total_price']
+        status = request.form['status']
+
+
+        # CUSTOMER
+        customer = conn.execute("""
+
+            SELECT customer_id
+            FROM customers
+
+            WHERE name = ?
+
+        """, (customer_name,)).fetchone()
+
+        if customer:
+
+            customer_id = customer[0]
+
+        else:
+
+            customer_id = 1
+
+
+        # TABLE
+        table = conn.execute("""
+
+            SELECT table_id
+            FROM restaurant_tables
+
+            WHERE table_number = ?
+
+        """, (table_name,)).fetchone()
+
+        if table:
+
+            table_id = table[0]
+
+        else:
+
+            table_id = 1
+
+
+        # UPDATE ORDERS
+        conn.execute("""
+
+            UPDATE orders
+
+            SET
+                customer_id = ?,
+                table_id = ?,
+                total_price = ?,
+                status = ?
+
+            WHERE order_id = ?
+
+        """, (
+            customer_id,
+            table_id,
+            total_price,
+            status,
+            order_id
+        ))
+
+
+        # UPDATE ORDER ITEMS
+        conn.execute("""
+
+            UPDATE order_items
+
+            SET
+                item_id = ?,
+                quantity = ?,
+                subtotal = ?
+
+            WHERE order_id = ?
+
+        """, (
+            item_id,
+            quantity,
+            total_price,
+            order_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/')
+
+    conn.close()
+
+    return render_template(
+        'edit_order.html',
+        order=order,
+        menu_items=menu_items
+    )
+
+
+# =========================
+# DELETE ORDER
+# =========================
+@app.route('/delete_order/<int:order_id>')
+def delete_order(order_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM order_items
+
+        WHERE order_id = ?
+
+    """, (order_id,))
+
+    conn.execute("""
+
+        DELETE FROM orders
+
+        WHERE order_id = ?
+
+    """, (order_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/')
 
 # =========================
 # RUN
