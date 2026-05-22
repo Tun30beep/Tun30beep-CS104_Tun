@@ -375,30 +375,35 @@ def add_order():
                 'Available'
             ))
 
-# ======================
-# ORDER ID
-# ======================
+        # ======================
+        # ORDER ID
+        # ======================
 
-all_ids = conn.execute("""
+        all_ids = conn.execute("""
 
-    SELECT order_id
-    FROM orders
+            SELECT order_id
+            FROM orders
 
-    ORDER BY order_id
+            ORDER BY order_id
 
-""").fetchall()
+        """).fetchall()
 
-order_id = 1
+        order_id = 1
 
-for row in all_ids:
+        for row in all_ids:
 
-    if row[0] == order_id:
+            if row[0] == order_id:
 
-        order_id += 1
+                order_id += 1
 
-    else:
+            else:
 
-        break
+                break
+
+
+        # ======================
+        # INSERT ORDER
+        # ======================
 
         conn.execute("""
 
@@ -423,6 +428,10 @@ for row in all_ids:
             status
         ))
 
+
+        # ======================
+        # INSERT ORDER ITEM
+        # ======================
 
         conn.execute("""
 
