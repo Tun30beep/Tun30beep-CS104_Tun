@@ -375,23 +375,30 @@ def add_order():
                 'Available'
             ))
 
+# ======================
+# ORDER ID
+# ======================
 
-        # ORDER ID
-        last_order = conn.execute("""
+all_ids = conn.execute("""
 
-            SELECT MAX(order_id)
-            FROM orders
+    SELECT order_id
+    FROM orders
 
-        """).fetchone()
+    ORDER BY order_id
 
-        if last_order[0] is None:
+""").fetchall()
 
-            order_id = 1
+order_id = 1
 
-        else:
+for row in all_ids:
 
-            order_id = last_order[0] + 1
+    if row[0] == order_id:
 
+        order_id += 1
+
+    else:
+
+        break
 
         conn.execute("""
 
