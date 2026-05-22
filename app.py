@@ -716,6 +716,164 @@ def delete_customer(customer_id):
     return redirect('/customers')
 
 # =========================
+# EDIT MENU
+# =========================
+@app.route('/edit_menu/<int:item_id>', methods=['GET', 'POST'])
+def edit_menu(item_id):
+
+    conn = get_db_connection()
+
+    item = conn.execute("""
+
+        SELECT *
+        FROM menu_items
+
+        WHERE item_id = ?
+
+    """, (item_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        item_name = request.form['item_name']
+        category = request.form['category']
+        price = request.form['price']
+        stock = request.form['stock']
+
+        conn.execute("""
+
+            UPDATE menu_items
+
+            SET
+                item_name = ?,
+                category = ?,
+                price = ?,
+                stock = ?
+
+            WHERE item_id = ?
+
+        """, (
+            item_name,
+            category,
+            price,
+            stock,
+            item_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/menu')
+
+    conn.close()
+
+    return render_template(
+        'edit_menu.html',
+        item=item
+    )
+
+
+# =========================
+# DELETE MENU
+# =========================
+@app.route('/delete_menu/<int:item_id>')
+def delete_menu(item_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM menu_items
+
+        WHERE item_id = ?
+
+    """, (item_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/menu')
+
+
+# =========================
+# EDIT TABLE
+# =========================
+@app.route('/edit_table/<int:table_id>', methods=['GET', 'POST'])
+def edit_table(table_id):
+
+    conn = get_db_connection()
+
+    table = conn.execute("""
+
+        SELECT *
+        FROM restaurant_tables
+
+        WHERE table_id = ?
+
+    """, (table_id,)).fetchone()
+
+    if request.method == 'POST':
+
+        table_number = request.form['table_number']
+        capacity = request.form['capacity']
+        status = request.form['status']
+
+        conn.execute("""
+
+            UPDATE restaurant_tables
+
+            SET
+                table_number = ?,
+                capacity = ?,
+                status = ?
+
+            WHERE table_id = ?
+
+        """, (
+            table_number,
+            capacity,
+            status,
+            table_id
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/restaurant_tables')
+
+    conn.close()
+
+    return render_template(
+        'edit_table.html',
+        table=table
+    )
+
+
+# =========================
+# DELETE TABLE
+# =========================
+@app.route('/delete_table/<int:table_id>')
+def delete_table(table_id):
+
+    conn = get_db_connection()
+
+    conn.execute("""
+
+        DELETE FROM restaurant_tables
+
+        WHERE table_id = ?
+
+    """, (table_id,))
+
+    conn.commit()
+
+    conn.close()
+
+    return redirect('/restaurant_tables')
+    
+# =========================
 # RUN
 # =========================
 if __name__ == '__main__':
