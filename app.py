@@ -872,6 +872,65 @@ def delete_table(table_id):
     conn.close()
 
     return redirect('/restaurant_tables')
+
+# =========================
+# ADD MENU
+# =========================
+@app.route('/add_menu', methods=['GET', 'POST'])
+def add_menu():
+
+    if request.method == 'POST':
+
+        item_name = request.form['item_name']
+        category = request.form['category']
+        price = request.form['price']
+        stock = request.form['stock']
+
+        conn = get_db_connection()
+
+        last_item = conn.execute("""
+
+            SELECT MAX(item_id)
+            FROM menu_items
+
+        """).fetchone()
+
+        if last_item[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_item[0] + 1
+
+        conn.execute("""
+
+            INSERT INTO menu_items
+            (
+                item_id,
+                item_name,
+                category,
+                price,
+                stock
+            )
+
+            VALUES (?, ?, ?, ?, ?)
+
+        """, (
+            new_id,
+            item_name,
+            category,
+            price,
+            stock
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/menu')
+
+    return render_template('add_menu.html')
     
 # =========================
 # RUN
