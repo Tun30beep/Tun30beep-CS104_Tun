@@ -16,6 +16,15 @@
 
     <h1>Employees</h1>
 
+    <a href="/add_employee"
+class="btn btn-green">
+
+    Add Employee
+
+</a>
+
+<br><br>
+
     <table>
 
         <tr>
@@ -24,6 +33,7 @@
             <th>Name</th>
             <th>Role</th>
             <th>Phone</th>
+            <th>Actions</th>
 
         </tr>
 
@@ -35,6 +45,23 @@
             <td>{{ employee[1] }}</td>
             <td>{{ employee[2] }}</td>
             <td>{{ employee[3] }}</td>
+            <td>
+
+    <a href="/edit_employee/{{ employee[0] }}"
+    class="btn btn-yellow">
+
+        Edit
+
+    </a>
+
+    <a href="/delete_employee/{{ employee[0] }}"
+    class="btn btn-red">
+
+        Delete
+
+    </a>
+
+</td>
 
         </tr>
 
