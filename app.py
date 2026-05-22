@@ -7,7 +7,7 @@ DATABASE = 'database.db'
 
 
 # =========================
-# DATABASE CONNECTION
+# DATABASE
 # =========================
 def get_db_connection():
 
@@ -63,6 +63,200 @@ def index():
 
 
 # =========================
+# MENU
+# =========================
+@app.route('/menu')
+def menu():
+
+    conn = get_db_connection()
+
+    menu_items = conn.execute(
+        'SELECT * FROM menu_items'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'menu.html',
+        menu_items=menu_items
+    )
+
+
+# =========================
+# CUSTOMERS
+# =========================
+@app.route('/customers')
+def customers():
+
+    conn = get_db_connection()
+
+    customers = conn.execute(
+        'SELECT * FROM customers'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'customers.html',
+        customers=customers
+    )
+
+
+# =========================
+# ADD CUSTOMER
+# =========================
+@app.route('/add_customer', methods=['GET', 'POST'])
+def add_customer():
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+
+        conn = get_db_connection()
+
+        last_customer = conn.execute("""
+
+            SELECT MAX(customer_id)
+            FROM customers
+
+        """).fetchone()
+
+        if last_customer[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_customer[0] + 1
+
+        conn.execute("""
+
+            INSERT INTO customers
+            (
+                customer_id,
+                name,
+                phone,
+                email
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            new_id,
+            name,
+            phone,
+            email
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/customers')
+
+    return render_template('add_customer.html')
+
+
+# =========================
+# EMPLOYEES
+# =========================
+@app.route('/employees')
+def employees():
+
+    conn = get_db_connection()
+
+    employees = conn.execute(
+        'SELECT * FROM employees'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'employees.html',
+        employees=employees
+    )
+
+
+# =========================
+# RESTAURANT TABLES
+# =========================
+@app.route('/restaurant_tables')
+def restaurant_tables():
+
+    conn = get_db_connection()
+
+    tables = conn.execute(
+        'SELECT * FROM restaurant_tables'
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        'restaurant_tables.html',
+        tables=tables
+    )
+
+
+# =========================
+# ADD TABLE
+# =========================
+@app.route('/add_table', methods=['GET', 'POST'])
+def add_table():
+
+    if request.method == 'POST':
+
+        table_number = request.form['table_number']
+        capacity = request.form['capacity']
+        status = request.form['status']
+
+        conn = get_db_connection()
+
+        last_table = conn.execute("""
+
+            SELECT MAX(table_id)
+            FROM restaurant_tables
+
+        """).fetchone()
+
+        if last_table[0] is None:
+
+            new_id = 1
+
+        else:
+
+            new_id = last_table[0] + 1
+
+        conn.execute("""
+
+            INSERT INTO restaurant_tables
+            (
+                table_id,
+                table_number,
+                capacity,
+                status
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        """, (
+            new_id,
+            table_number,
+            capacity,
+            status
+        ))
+
+        conn.commit()
+
+        conn.close()
+
+        return redirect('/restaurant_tables')
+
+    return render_template('add_table.html')
+
+
+# =========================
 # ADD ORDER
 # =========================
 @app.route('/add_order', methods=['GET', 'POST'])
@@ -84,9 +278,7 @@ def add_order():
         total_price = request.form['total_price']
         status = request.form['status']
 
-        # ======================
         # CUSTOMER
-        # ======================
         customer = conn.execute("""
 
             SELECT customer_id
@@ -133,9 +325,7 @@ def add_order():
             ))
 
 
-        # ======================
         # TABLE
-        # ======================
         table = conn.execute("""
 
             SELECT table_id
@@ -186,9 +376,7 @@ def add_order():
             ))
 
 
-        # ======================
         # ORDER ID
-        # ======================
         last_order = conn.execute("""
 
             SELECT MAX(order_id)
@@ -205,9 +393,6 @@ def add_order():
             order_id = last_order[0] + 1
 
 
-        # ======================
-        # INSERT ORDER
-        # ======================
         conn.execute("""
 
             INSERT INTO orders
@@ -232,9 +417,6 @@ def add_order():
         ))
 
 
-        # ======================
-        # INSERT ORDER ITEM
-        # ======================
         conn.execute("""
 
             INSERT INTO order_items
@@ -269,162 +451,7 @@ def add_order():
 
 
 # =========================
-# RESTAURANT TABLES
-# =========================
-@app.route('/restaurant_tables')
-def restaurant_tables():
-
-    conn = get_db_connection()
-
-    tables = conn.execute(
-        'SELECT * FROM restaurant_tables'
-    ).fetchall()
-
-    conn.close()
-
-    return render_template(
-        'restaurant_tables.html',
-        tables=tables
-    )
-
-
-# =========================
-# ADD TABLE
-# =========================
-@app.route('/add_table', methods=['GET', 'POST'])
-def add_table():
-
-    if request.method == 'POST':
-
-        table_name = request.form['table_name']
-        capacity = request.form['capacity']
-        status = request.form['status']
-
-        conn = get_db_connection()
-
-        last_table = conn.execute("""
-
-            SELECT MAX(table_id)
-            FROM restaurant_tables
-
-        """).fetchone()
-
-        if last_table[0] is None:
-
-            new_id = 1
-
-        else:
-
-            new_id = last_table[0] + 1
-
-        conn.execute("""
-
-            INSERT INTO restaurant_tables
-            (
-                table_id,
-                table_number,
-                capacity,
-                status
-            )
-
-            VALUES (?, ?, ?, ?)
-
-        """, (
-            new_id,
-            table_name,
-            capacity,
-            status
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/restaurant_tables')
-
-    return render_template('add_table.html')
-
-
-# =========================
-# EDIT TABLE
-# =========================
-@app.route('/edit_table/<int:table_id>', methods=['GET', 'POST'])
-def edit_table(table_id):
-
-    conn = get_db_connection()
-
-    table = conn.execute("""
-
-        SELECT *
-        FROM restaurant_tables
-
-        WHERE table_id = ?
-
-    """, (table_id,)).fetchone()
-
-    if request.method == 'POST':
-
-        table_name = request.form['table_name']
-        capacity = request.form['capacity']
-        status = request.form['status']
-
-        conn.execute("""
-
-            UPDATE restaurant_tables
-
-            SET
-                table_number = ?,
-                capacity = ?,
-                status = ?
-
-            WHERE table_id = ?
-
-        """, (
-            table_name,
-            capacity,
-            status,
-            table_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect('/restaurant_tables')
-
-    conn.close()
-
-    return render_template(
-        'edit_table.html',
-        table=table
-    )
-
-
-# =========================
-# DELETE TABLE
-# =========================
-@app.route('/delete_table/<int:table_id>')
-def delete_table(table_id):
-
-    conn = get_db_connection()
-
-    conn.execute("""
-
-        DELETE FROM restaurant_tables
-
-        WHERE table_id = ?
-
-    """, (table_id,))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect('/restaurant_tables')
-
-
-# =========================
-# RUN APP
+# RUN
 # =========================
 if __name__ == '__main__':
 
