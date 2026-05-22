@@ -160,16 +160,21 @@ def add_customer():
 
 
 # =========================
-# EMPLOYEES
+# EMPLOYEES PAGE
 # =========================
 @app.route('/employees')
 def employees():
 
     conn = get_db_connection()
 
-    employees = conn.execute(
-        'SELECT * FROM employees'
-    ).fetchall()
+    employees = conn.execute("""
+
+        SELECT *
+        FROM employees
+
+        ORDER BY employee_id ASC
+
+    """).fetchall()
 
     conn.close()
 
