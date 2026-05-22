@@ -28,31 +28,31 @@ def index():
 
     orders = conn.execute("""
 
-        SELECT
-            o.order_id,
-            c.name,
-            rt.table_number,
-            mi.item_name,
-            o.total_price,
-            o.status
+    SELECT
+        o.order_id,
+        c.name,
+        rt.table_number,
+        mi.item_name,
+        o.total_price,
+        o.status
 
-        FROM orders o
+    FROM orders o
 
-        JOIN customers c
-        ON o.customer_id = c.customer_id
+    LEFT JOIN customers c
+    ON o.customer_id = c.customer_id
 
-        JOIN restaurant_tables rt
-        ON o.table_id = rt.table_id
+    LEFT JOIN restaurant_tables rt
+    ON o.table_id = rt.table_id
 
-        JOIN order_items oi
-        ON o.order_id = oi.order_id
+    LEFT JOIN order_items oi
+    ON o.order_id = oi.order_id
 
-        JOIN menu_items mi
-        ON oi.item_id = mi.item_id
+    LEFT JOIN menu_items mi
+    ON oi.item_id = mi.item_id
 
-        ORDER BY o.order_id DESC
+    ORDER BY o.order_id DESC
 
-    """).fetchall()
+""").fetchall()
 
     conn.close()
 
